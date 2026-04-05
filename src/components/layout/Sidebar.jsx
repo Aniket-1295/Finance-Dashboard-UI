@@ -7,6 +7,7 @@ import {
   Eye 
 } from 'lucide-react';
 import { cn } from '../../lib/utils';
+import { useAppContext } from '../../context/AppContext';
 
 const NAV_ITEMS = [
   { id: 'overview', label: 'Overview', icon: LayoutGrid },
@@ -14,8 +15,16 @@ const NAV_ITEMS = [
   { id: 'insights', label: 'Insights', icon: Lightbulb },
 ];
 
-export function Sidebar({ view, setView, role, setRole, isOpen, setIsOpen }) {
-  const isAdmin = role === 'admin';
+export function Sidebar() {
+  const { 
+    view, 
+    setView, 
+    role, 
+    setRole, 
+    sidebarOpen: isOpen, 
+    setSidebarOpen: setIsOpen,
+    isAdmin 
+  } = useAppContext();
 
   return (
     <>
@@ -29,22 +38,24 @@ export function Sidebar({ view, setView, role, setRole, isOpen, setIsOpen }) {
       />
 
       <aside className={cn(
-        "fixed top-0 left-0 bottom-0 z-50 w-[220px] bg-dashboard-bg-secondary border-r border-dashboard-border flex flex-col transition-transform duration-300 lg:translate-x-0",
+        "fixed top-0 left-0 bottom-0 z-50 w-[240px] bg-dashboard-bg flex flex-col transition-transform duration-300 lg:translate-x-0 border-r border-transparent",
         isOpen ? "translate-x-0" : "-translate-x-full"
       )}>
-        <div className="p-6 border-b border-dashboard-border">
-          <div className="flex items-center gap-3">
-            <div className="w-8 h-8 bg-dashboard-accent rounded-lg flex items-center justify-center font-mono font-medium text-black">
-              F
+        <div className="p-4 px-6 mt-2">
+          <div className="flex items-center gap-3.5">
+            <div className="w-10 h-10 bg-[#0a403a] rounded-full flex items-center justify-center shadow-sm">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#d5f279" strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round">
+                <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5"/>
+              </svg>
             </div>
             <div>
-              <div className="text-[17px] font-semibold tracking-tight text-dashboard-text leading-tight">Finio</div>
-              <div className="text-[10px] text-dashboard-text-dim tracking-[1.5px] uppercase mt-0.5">Finance OS</div>
+              <div className="text-[15px] font-bold tracking-tight text-dashboard-text leading-tight">Finio Finance</div>
+              <div className="text-[12px] text-dashboard-text-muted mt-0.5 font-medium">Dashboard</div>
             </div>
           </div>
         </div>
 
-        <nav className="flex-1 p-4 space-y-1">
+        <nav className="flex-1 p-4 space-y-2">
           <div className="text-[10px] tracking-[1.2px] uppercase text-dashboard-text-dim px-2 py-4">
             Navigation
           </div>
@@ -59,14 +70,17 @@ export function Sidebar({ view, setView, role, setRole, isOpen, setIsOpen }) {
                   setIsOpen(false);
                 }}
                 className={cn(
-                  "w-full flex items-center gap-3 px-3 py-2.5 rounded-lg transition-all text-sm group",
+                  "w-full flex items-center justify-between px-4 py-3 rounded-full transition-all text-sm group",
                   active 
-                    ? "bg-dashboard-accent-soft text-dashboard-accent font-medium" 
+                    ? "bg-[#111111] text-white font-medium shadow-md" 
                     : "text-dashboard-text-muted hover:bg-dashboard-bg-tertiary hover:text-dashboard-text"
                 )}
               >
-                <Icon className={cn("w-4 h-4 transition-opacity", active ? "opacity-100" : "opacity-70 group-hover:opacity-100")} />
-                {item.label}
+                <div className="flex items-center gap-3">
+                  <Icon className={cn("w-4 h-4 transition-opacity", active ? "opacity-100" : "opacity-70 group-hover:opacity-100")} />
+                  <span className={cn(active ? "font-semibold" : "font-medium")}>{item.label}</span>
+                </div>
+                {active && <div className="w-1.5 h-1.5 rounded-full bg-dashboard-accent mr-1"></div>}
               </button>
             );
           })}

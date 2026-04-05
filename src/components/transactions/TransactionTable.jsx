@@ -12,26 +12,38 @@ import {
 import { CATEGORIES } from '../../utils/constants';
 import { fmtAbs, fmtDate } from '../../utils/formatters';
 import { cn } from '../../lib/utils';
+import { useAppContext } from '../../context/AppContext';
 
-export function TransactionTable({ 
-  paginated, 
-  filtered, 
-  search, 
-  setSearch, 
-  filterCat, 
-  setFilterCat, 
-  filterType, 
-  setFilterType, 
-  sortField, 
-  toggleSort, 
-  sortIcon, 
-  page, 
-  setPage, 
-  totalPages, 
-  isAdmin, 
-  onEdit, 
-  onDelete 
-}) {
+export function TransactionTable() {
+  const { 
+    paginatedTransactions: paginated, 
+    filteredTransactions: filtered, 
+    search, 
+    setSearch, 
+    filterCat, 
+    setFilterCat, 
+    filterType, 
+    setFilterType, 
+    sortField, 
+    toggleSort, 
+    sortIcon, 
+    page, 
+    setPage, 
+    totalPages, 
+    isAdmin,
+    setSelectedTx,
+    setModalType,
+    deleteTransaction
+  } = useAppContext();
+
+  const onEdit = (tx) => {
+    setSelectedTx(tx);
+    setModalType('edit');
+  };
+
+  const onDelete = (id) => {
+    deleteTransaction(id);
+  };
   return (
     <div className="animate-in fade-in duration-500">
       <div className="flex flex-wrap gap-3 mb-4">
@@ -153,7 +165,7 @@ export function TransactionTable({
                   </td>
                   {isAdmin && (
                     <td className="px-5 py-3">
-                      <div className="flex items-center gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
+                      <div className="flex items-center gap-1.5 opacity-50 group-hover:opacity-100 transition-opacity">
                         <button 
                           onClick={() => onEdit(t)}
                           className="p-1.5 rounded-md hover:bg-dashboard-bg-tertiary text-dashboard-text-muted hover:text-dashboard-accent transition-colors"

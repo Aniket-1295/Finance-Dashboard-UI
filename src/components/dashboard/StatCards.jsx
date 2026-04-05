@@ -1,126 +1,131 @@
 import React from 'react';
 import { 
-  TrendingUp, 
-  TrendingDown, 
+  PremiumWallet, 
+  PremiumIncome, 
+  PremiumExpense, 
+  PremiumSavings 
+} from '../ui/PremiumIcons';
+import { 
   ArrowUpRight, 
   ArrowDownRight,
-  Wallet,
-  ArrowUp,
-  ArrowDown,
-  Star
+  Briefcase
 } from 'lucide-react';
 import { cn } from '../../lib/utils';
+import { useAppContext } from '../../context/AppContext';
+import { fmtAbs } from '../../utils/formatters';
 
 const ICON_MAP = {
-  wallet: Wallet,
-  up: ArrowUp,
-  down: ArrowDown,
-  star: Star,
+  'briefcase': PremiumWallet,
+  'trending-up': PremiumIncome,
+  'trending-down': PremiumExpense,
+  'piggy-bank': PremiumSavings,
 };
 
-export function StatCard({ label, value, delta, up, color, icon, bgColor, delay = "0s", empty = false, onAction }) {
-  const Icon = ICON_MAP[icon] || Wallet;
+export function StatCard({ label, value, delta, up, icon, bgGradient, delay = "0s", empty = false, onAction }) {
+  const Icon = ICON_MAP[icon] || Briefcase;
   const TrendIcon = up ? ArrowUpRight : ArrowDownRight;
+  const deltaValue = delta.split(' ')[0];
+  const deltaText = delta.substring(delta.indexOf(' ') + 1);
 
   return (
     <div 
       className={cn(
-        "bg-dashboard-bg-secondary border rounded-dashboard p-5 transition-all animate-in fade-in slide-in-from-bottom-4 duration-500 fill-both",
-        empty ? "border-dashboard-border/50 opacity-60" : "border-dashboard-border hover:border-dashboard-border-strong"
+        "relative rounded-[22px] p-6 transition-all duration-300 ease-out text-white overflow-hidden group animate-in fade-in slide-in-from-bottom-4 fill-both",
+        empty ? "opacity-60 bg-dashboard-bg-secondary" : `shadow-[0_8px_30px_rgb(0,0,0,0.06)] hover:shadow-[0_12px_40px_rgb(0,0,0,0.12)] hover:-translate-y-1 ${bgGradient}`
       )}
       style={{ animationDelay: delay }}
     >
-      <div 
-        className={cn("w-9 h-9 rounded-lg flex items-center justify-center mb-4 transition-transform", !empty && "hover:scale-110")}
-        style={{ backgroundColor: empty ? "var(--color-dashboard-bg-tertiary)" : bgColor, color: empty ? "var(--color-dashboard-text-dim)" : color }}
-      >
-        <Icon className="w-4.5 h-4.5" />
-      </div>
+      <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
       
-      <div className="flex items-center gap-1.5 text-[10px] font-bold tracking-widest uppercase text-dashboard-text-dim mb-2.5">
-        <span className="w-1.5 h-1.5 rounded-full" style={{ backgroundColor: empty ? "var(--color-dashboard-text-dim)" : color }} />
-        {label}
-      </div>
-
-      <div className={cn(
-        "font-mono text-2xl font-medium tracking-tighter mb-2",
-        empty ? "text-dashboard-text-dim" : ""
-      )} style={!empty ? { color } : {}}>
-        {empty ? "₹0.00" : value}
-      </div>
-
-      {empty ? (
-        <button 
-          onClick={onAction}
-          className="text-[10px] font-bold uppercase tracking-wider text-dashboard-accent hover:text-dashboard-accent-muted transition-colors flex items-center gap-1"
-        >
-          Add first transaction →
-        </button>
-      ) : (
-        <div className={cn(
-          "flex items-center gap-1 text-xs font-semibold",
-          up ? "text-dashboard-success" : "text-dashboard-danger"
-        )}>
-          <TrendIcon className="w-3.5 h-3.5" />
-          {delta}
+      <div className="relative z-10 flex flex-col h-full justify-between">
+        <div className="w-12 h-12 rounded-[14px] flex items-center justify-center bg-white/20 backdrop-blur-sm shrink-0 shadow-sm transition-transform group-hover:scale-105 mb-6">
+          <Icon className="w-[22px] h-[22px] text-white opacity-90" strokeWidth={2.5} />
         </div>
-      )}
+
+        <div>
+           <div className="text-[13px] font-semibold tracking-wide text-white/90 mb-1.5">
+             {label}
+           </div>
+          <div className="font-sora text-[32px] leading-tight font-bold tracking-tight mb-3">
+            <span className="text-white/80 font-medium mr-1">₹</span>
+            {empty ? "0.00" : value.toString().replace('₹', '')}
+          </div>
+
+          {!empty && (
+            <div className="flex items-center gap-2 text-[11.5px] font-semibold mt-1">
+              <div className="px-2 py-0.5 rounded-[6px] bg-white/25 flex items-center gap-1 backdrop-blur-sm shadow-sm text-white/95">
+                {up ? '+' : ''}{deltaValue}
+                <TrendIcon className="w-3.5 h-3.5" strokeWidth={3} />
+              </div>
+              <span className="text-white/80 font-medium">{deltaText}</span>
+            </div>
+          )}
+
+          {empty && (
+            <button 
+              onClick={onAction}
+              className="mt-4 text-[11px] font-bold uppercase tracking-wider text-white/90 hover:text-white transition-colors flex items-center gap-1"
+            >
+              Add first transaction →
+            </button>
+          )}
+        </div>
+      </div>
     </div>
   );
 }
 
-export function SummaryGrid({ balance, income, expense, savings, isAllEmpty = false, onAdd }) {
+export function SummaryGrid() {
+  const { metrics, transactions, setModalType } = useAppContext();
+  const isAllEmpty = transactions.length === 0;
+
   return (
-    <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 mb-6">
+    <>
       <StatCard 
         label="Total Balance" 
-        value={balance} 
-        delta="+4.2% this month" 
+        value={fmtAbs(metrics.balance)} 
+        delta="22% than last month" 
         up={true} 
-        color="#d4a853" 
-        icon="wallet" 
-        bgColor="var(--color-dashboard-accent-soft)"
+        icon="briefcase" 
+        bgGradient="bg-gradient-to-br from-[#45dfd7] to-[#2bd1d0]"
         delay="0s"
         empty={isAllEmpty}
-        onAction={onAdd}
+        onAction={() => setModalType('add')}
       />
-      <button className="hidden" onClick={onAdd} /> {/* Accessibility/Logic anchor */}
       <StatCard 
         label="Total Income" 
-        value={income} 
-        delta="+12.1% vs last month" 
+        value={fmtAbs(metrics.income)} 
+        delta="36% than last month" 
         up={true} 
-        color="var(--color-dashboard-success)" 
-        icon="up" 
-        bgColor="rgba(76, 175, 133, 0.12)"
+        icon="trending-up" 
+        bgGradient="bg-gradient-to-br from-[#8db1fb] to-[#6c8cf4]"
         delay="0.1s"
         empty={isAllEmpty}
-        onAction={onAdd}
+        onAction={() => setModalType('add')}
       />
       <StatCard 
         label="Total Expenses" 
-        value={expense} 
-        delta="-3.4% vs last month" 
+        value={fmtAbs(metrics.expense)} 
+        delta="11% than last month" 
         up={false} 
-        color="var(--color-dashboard-danger)" 
-        icon="down" 
-        bgColor="rgba(224, 92, 106, 0.12)"
+        icon="trending-down" 
+        bgGradient="bg-gradient-to-br from-[#fca3bf] to-[#f66a98]"
         delay="0.2s"
         empty={isAllEmpty}
-        onAction={onAdd}
+        onAction={() => setModalType('add')}
       />
       <StatCard 
-        label="Savings Rate" 
-        value={savings + '%'} 
-        delta="Goal: 30%" 
+        label="Total Savings" 
+        value={metrics.savings + '%'} 
+        delta="15% than last month" 
         up={true} 
-        color="var(--color-dashboard-info)" 
-        icon="star" 
-        bgColor="rgba(90, 159, 212, 0.12)"
+        icon="piggy-bank" 
+        bgGradient="bg-gradient-to-br from-[#d0a7fc] to-[#b385fb]"
         delay="0.3s"
         empty={isAllEmpty}
-        onAction={onAdd}
+        onAction={() => setModalType('add')}
       />
-    </div>
+    </>
   );
 }
+

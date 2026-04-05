@@ -1,7 +1,21 @@
 import React, { useState } from 'react';
 import { CATEGORIES } from '../../utils/constants';
+import { useAppContext } from '../../context/AppContext';
 
-export function TxForm({ tx, onSave, onClose }) {
+export function TxForm() {
+  const { 
+    selectedTx: tx, 
+    addTransaction, 
+    updateTransaction, 
+    setModalType, 
+    setSelectedTx 
+  } = useAppContext();
+
+  const onClose = () => {
+    setModalType(null);
+    setSelectedTx(null);
+  };
+
   const isEdit = !!tx?.id;
   const [form, setForm] = useState(tx || {
     date: new Date().toISOString().slice(0, 10),
@@ -19,11 +33,15 @@ export function TxForm({ tx, onSave, onClose }) {
     const amt = parseFloat(form.amount);
     if (isNaN(amt)) return;
     
-    onSave({
+    const data = {
       ...form,
       id: form.id || 't' + Date.now(),
       amount: form.type === 'expense' ? -Math.abs(amt) : Math.abs(amt),
-    });
+    };
+
+    if (isEdit) updateTransaction(tx.id, data);
+    else addTransaction(data);
+    onClose();
   };
 
   return (

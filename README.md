@@ -1,5 +1,7 @@
 # 💰 Finance Dashboard
 
+🔗 **Live Demo:** https://finance-dashboard-ui-lemon-two.vercel.app/
+
 A modern, responsive **Finance Dashboard Web Application** built using **React + Vite + JavaScript + Tailwind CSS**, designed to help users track financial activity, analyze spending patterns, and gain actionable insights.
 
 ---
@@ -19,10 +21,10 @@ This dashboard provides a clean and intuitive interface to:
 
 * **Frontend:** React (Vite) + JavaScript
 * **Styling:** Tailwind CSS
-* **State Management:** Redux
-* **Charts:** Recharts (or equivalent)
+* **State Management:** Context API
+* **Charts:** Recharts
 * **Storage:** LocalStorage
-* **Animations:** Framer Motion (or CSS transitions)
+* **Animations:** basic animation applied
 
 ---
 
@@ -35,12 +37,15 @@ This dashboard provides a clean and intuitive interface to:
   * Total Balance
   * Total Income
   * Total Expenses
+
 * Time-based visualization:
 
   * Balance trend over time (line chart)
+
 * Category-based visualization:
 
-  * Spending breakdown (pie/donut chart)
+  * Spending breakdown (pie)
+
 * Interactive UI with hover states and smooth transitions
 
 ---
@@ -88,7 +93,7 @@ This dashboard provides a clean and intuitive interface to:
 
 ---
 
-### 5. State Management (Redux)
+### 5. State Management (Context API)
 
 Efficient state handling for:
 
@@ -97,17 +102,15 @@ Efficient state handling for:
 * User role (Admin / Viewer)
 * UI states (theme, modals)
 
-Structured using scalable Redux architecture:
+Structured using scalable Context API architecture:
 
-* Actions
-* Reducers
+* createContext
+* useContext
 * Centralized store
 
 ---
 
 ## 🌟 Optional Enhancements (Implemented)
-
-All optional enhancements have been successfully implemented to strengthen the project:
 
 ### 🌗 Dark Mode
 
@@ -129,6 +132,7 @@ All optional enhancements have been successfully implemented to strengthen the p
 
   * Fetch transactions
   * Add/update/delete operations
+
 * Mimics real backend interaction
 
 ---
@@ -163,14 +167,20 @@ All optional enhancements have been successfully implemented to strengthen the p
 ## 🎨 UI/UX Highlights
 
 * Clean, minimal fintech-inspired design
+
 * Proper spacing, typography, and hierarchy
+
 * Fully responsive across:
 
   * Mobile
   * Tablet
   * Desktop
+
 * Consistent component styling
+
 * Intuitive navigation and layout
+
+* UI inspired by Bento UI theme
 
 ---
 
@@ -180,7 +190,7 @@ All optional enhancements have been successfully implemented to strengthen the p
 * No data in charts
 * Invalid input validation
 * Graceful UI fallbacks
-* Loading states (if applicable)
+* Loading states
 
 ---
 
@@ -189,13 +199,11 @@ All optional enhancements have been successfully implemented to strengthen the p
 ```
 src/
 │── components/
-│── pages/
-│── redux/
-│   ├── actions/
-│   ├── reducers/
-│   └── store.js
-│── utils/
+│── assets/
+│── context/
 │── hooks/
+│── lib/
+│── utils/
 │── App.jsx
 │── main.jsx
 ```
@@ -235,7 +243,6 @@ http://localhost:5173
 
 * Focused on **clarity over complexity**
 * Designed UI to be **intuitive and scalable**
-* Used **Redux for predictable state management**
 * Built reusable and modular components
 * Prioritized **real-world dashboard usability**
 
@@ -268,7 +275,7 @@ http://localhost:5173
 
 ### 6. State Management
 
-* Efficient Redux implementation for global state handling
+* Efficient Context API implementation for global state handling
 
 ### 7. Documentation
 

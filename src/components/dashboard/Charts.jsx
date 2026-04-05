@@ -12,7 +12,7 @@ import {
   ArcElement,
 } from 'chart.js';
 import { Line, Doughnut } from 'react-chartjs-2';
-import { CATEGORIES, MONTHLY_DATA } from '../../utils/constants';
+import { CATEGORIES } from '../../utils/constants';
 import { getLastNMonthsData } from '../../utils/dataUtils';
 
 ChartJS.register(
@@ -27,10 +27,15 @@ ChartJS.register(
   ArcElement
 );
 
-export function TrendChart({ theme, transactions = [] }) {
+const PREM_PIE_COLORS = ['#f56795', '#45dfd7', '#ffb067', '#8db1fb', '#caa1f8', '#a1a1aa'];
+
+import { useAppContext } from '../../context/AppContext';
+
+export function TrendChart() {
+  const { theme, transactions } = useAppContext();
   const isDark = theme === 'dark';
-  const gridColor = isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.06)';
-  const textColor = isDark ? '#555870' : '#9a9ab0';
+  const gridColor = isDark ? 'rgba(255, 255, 255, 0.03)' : 'rgba(0, 0, 0, 0.03)';
+  const textColor = isDark ? '#8186a1' : '#8186a1';
 
   const chartData = React.useMemo(() => {
     const months = getLastNMonthsData(transactions, 6);
@@ -53,30 +58,54 @@ export function TrendChart({ theme, transactions = [] }) {
     );
   }
 
+  const maxVal = React.useMemo(() => {
+    if (!chartData) return 1000;
+    const all = [...chartData.income, ...chartData.expense];
+    return Math.max(...all, 1000);
+  }, [chartData]);
+
   const data = {
     labels: chartData.labels,
     datasets: [
       {
         label: 'Income',
         data: chartData.income,
-        borderColor: '#4caf85',
-        backgroundColor: 'rgba(76, 175, 133, 0.08)',
+        borderColor: '#5b8def',
+        backgroundColor: (context) => {
+          const ctx = context.chart.ctx;
+          const gradient = ctx.createLinearGradient(0, 0, 0, 250);
+          gradient.addColorStop(0, 'rgba(91, 141, 239, 0.25)');
+          gradient.addColorStop(1, 'rgba(91, 141, 239, 0.01)');
+          return gradient;
+        },
         fill: true,
         tension: 0.4,
-        pointRadius: 4,
-        pointBackgroundColor: '#4caf85',
-        borderWidth: 2,
+        pointRadius: 0,
+        pointHoverRadius: 6,
+        pointBackgroundColor: '#ffffff',
+        pointBorderColor: '#5b8def',
+        pointBorderWidth: 2,
+        borderWidth: 3,
       },
       {
         label: 'Expenses',
         data: chartData.expense,
-        borderColor: '#e05c6a',
-        backgroundColor: 'rgba(224, 92, 106, 0.06)',
+        borderColor: '#f56795',
+        backgroundColor: (context) => {
+          const ctx = context.chart.ctx;
+          const gradient = ctx.createLinearGradient(0, 0, 0, 250);
+          gradient.addColorStop(0, 'rgba(245, 103, 149, 0.15)');
+          gradient.addColorStop(1, 'rgba(245, 103, 149, 0.01)');
+          return gradient;
+        },
         fill: true,
         tension: 0.4,
-        pointRadius: 4,
-        pointBackgroundColor: '#e05c6a',
-        borderWidth: 2,
+        pointRadius: 0,
+        pointHoverRadius: 6,
+        pointBackgroundColor: '#ffffff',
+        pointBorderColor: '#f56795',
+        pointBorderWidth: 2,
+        borderWidth: 3,
       },
     ],
   };
@@ -84,30 +113,52 @@ export function TrendChart({ theme, transactions = [] }) {
   const options = {
     responsive: true,
     maintainAspectRatio: false,
+    layout: {
+      padding: {
+        top: 20,
+        bottom: 0,
+        left: 0,
+        right: 10
+      }
+    },
+    interaction: {
+      mode: 'index',
+      intersect: false,
+    },
     plugins: {
       legend: { display: false },
       tooltip: {
-        backgroundColor: isDark ? '#1a1d25' : '#ffffff',
-        borderColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
+        backgroundColor: isDark ? '#2a2b40' : '#ffffff',
+        borderColor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.05)',
         borderWidth: 1,
-        titleColor: isDark ? '#f0f0f5' : '#1a1a2e',
-        bodyColor: isDark ? '#8a8fa8' : '#5a5a78',
+        titleColor: isDark ? '#f0f0f5' : '#2a2b40',
+        bodyColor: isDark ? '#8186a1' : '#8186a1',
         padding: 12,
-        cornerRadius: 8,
+        cornerRadius: 12,
         displayColors: true,
+        boxPadding: 4,
+        usePointStyle: true,
       },
     },
     scales: {
       x: {
-        grid: { color: gridColor },
-        ticks: { color: textColor, font: { family: "'DM Mono', monospace", size: 10 } },
+        grid: { color: gridColor, drawBorder: false },
+        ticks: { 
+          color: textColor, 
+          font: { family: "'DM Mono', monospace", size: 10 }, 
+          padding: 8,
+          maxRotation: 0,
+          autoSkip: true
+        },
       },
       y: {
-        grid: { color: gridColor },
+        suggestedMax: maxVal * 1.15,
+        grid: { color: gridColor, drawBorder: false, borderDash: [5, 5] },
         ticks: { 
           color: textColor, 
           font: { family: "'DM Mono', monospace", size: 10 },
-          callback: (v) => '₹' + (v / 1000).toFixed(0) + 'k'
+          padding: 10,
+          callback: (v) => v === 0 ? '₹0' : '₹' + (v / 1000).toFixed(0) + 'k'
         },
       },
     },
@@ -116,7 +167,8 @@ export function TrendChart({ theme, transactions = [] }) {
   return <Line data={data} options={options} />;
 }
 
-export function SpendingDonut({ transactions, theme }) {
+export function SpendingDonut() {
+  const { transactions, theme } = useAppContext();
   const isDark = theme === 'dark';
   
   const processedData = React.useMemo(() => {
@@ -125,7 +177,7 @@ export function SpendingDonut({ transactions, theme }) {
     expenses.forEach(t => {
       bycat[t.category] = (bycat[t.category] || 0) + Math.abs(t.amount);
     });
-    return Object.entries(bycat).sort((a, b) => b[1] - a[1]).slice(0, 6);
+    return Object.entries(bycat).sort((a, b) => b[1] - a[1]).slice(0, 5);
   }, [transactions]);
 
   if (!processedData || processedData.length === 0) {
@@ -137,43 +189,62 @@ export function SpendingDonut({ transactions, theme }) {
     );
   }
 
+  const totalAmount = React.useMemo(() => {
+    return processedData.reduce((acc, curr) => acc + curr[1], 0);
+  }, [processedData]);
+
   const data = {
-// ... rest of the code ...
     labels: processedData.map(d => d[0]),
     datasets: [{
       data: processedData.map(d => d[1]),
-      backgroundColor: processedData.map(d => CATEGORIES[d[0]]?.color || '#888'),
+      backgroundColor: processedData.map((d, i) => PREM_PIE_COLORS[i % PREM_PIE_COLORS.length]),
       borderWidth: 0,
-      hoverOffset: 8,
+      borderRadius: 16,
+      spacing: 6,
+      hoverOffset: 4,
     }],
   };
 
   const options = {
     responsive: true,
     maintainAspectRatio: false,
-    cutout: '68%',
+    cutout: '80%',
     plugins: {
       legend: { display: false },
       tooltip: {
-        backgroundColor: isDark ? '#1a1d25' : '#ffffff',
-        borderColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
+        backgroundColor: isDark ? '#2a2b40' : '#ffffff',
+        borderColor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.05)',
         borderWidth: 1,
         padding: 12,
-        cornerRadius: 8,
+        cornerRadius: 12,
+        titleColor: isDark ? '#f0f0f5' : '#2a2b40',
+        bodyColor: isDark ? '#8186a1' : '#8186a1',
+        displayColors: true,
       },
     },
   };
 
   return (
-    <div className="flex flex-col items-center">
-      <div className="h-[180px] w-full relative">
-        <Doughnut data={data} options={options} />
+    <div className="flex items-center justify-between gap-3 h-[200px] w-full">
+      <div className="h-[140px] w-[140px] shrink-0 relative flex items-center justify-center">
+        <Doughnut data={data} options={{...options, maintainAspectRatio: false}} />
+        <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
+           <div className="font-sora text-[17px] font-extrabold mt-0.5" style={{ color: isDark ? '#ffffff' : '#2a2b40' }}>
+             ₹{totalAmount >= 1000 ? (totalAmount/1000).toFixed(1) + 'k' : totalAmount}
+           </div>
+           <div className="text-[9px] text-[#8186a1] font-semibold mt-1 uppercase tracking-wider">Spent</div>
+        </div>
       </div>
-      <div className="grid grid-cols-2 gap-x-4 gap-y-2 mt-4 w-full">
-        {processedData.slice(0, 4).map(([cat, val]) => (
-          <div key={cat} className="flex items-center gap-2 text-[11px] text-dashboard-text-muted">
-            <div className="w-2 h-2 rounded-sm shrink-0" style={{ backgroundColor: CATEGORIES[cat]?.color }} />
-            <span className="truncate">{cat}</span>
+      <div className="flex flex-col justify-center gap-y-3 flex-1 px-2">
+        {processedData.map(([cat, val], i) => (
+          <div key={cat} className="flex justify-between items-center text-[11px] 2xl:text-[12px] w-full">
+             <div className="flex items-center gap-2">
+               <div className="w-1.5 h-1.5 rounded-full shrink-0" style={{ backgroundColor: PREM_PIE_COLORS[i % PREM_PIE_COLORS.length] }} />
+               <span className="text-[#8186a1] whitespace-nowrap">{cat}</span>
+             </div>
+             <span className="font-bold text-dashboard-text ml-3">
+                {((val / totalAmount) * 100).toFixed(0)}%
+             </span>
           </div>
         ))}
       </div>
