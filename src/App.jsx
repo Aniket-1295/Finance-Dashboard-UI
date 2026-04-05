@@ -108,9 +108,11 @@ function App() {
         <main className="flex-1 p-6 lg:p-12 w-full bg-dashboard-island lg:rounded-tl-[40px] shadow-[inset_0_4px_24px_rgba(0,0,0,0.02)] transition-colors duration-300">
           {view === 'overview' && (
             <div className="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-6 animate-in fade-in duration-700">
-              <div className="xl:col-span-4 mb-2 flex items-center justify-between">
+
+              {/* Header row — full width on all screen sizes */}
+              <div className="col-span-1 md:col-span-2 xl:col-span-4 mb-2 flex items-center justify-between">
                 <div>
-                  <h2 className="text-3xl font-bold text-dashboard-text tracking-tight mb-1">Financial Overview</h2>
+                  <h2 className="text-2xl lg:text-3xl font-bold text-dashboard-text tracking-tight mb-1">Financial Overview</h2>
                   <div className="flex items-center gap-2 text-sm text-dashboard-text-muted font-medium">
                     <span className="text-dashboard-text">Home</span>
                     <span className="opacity-50 text-[10px]">›</span>
@@ -121,11 +123,12 @@ function App() {
 
               <SummaryGrid />
               
-              <div className="xl:col-span-4 grid grid-cols-1 xl:grid-cols-5 gap-6">
-                <div className="xl:col-span-3 bg-dashboard-bg-secondary border border-dashboard-border shadow-sm rounded-dashboard p-6 transition-all hover:shadow-md">
-                  <div className="flex items-center justify-between mb-8">
+              {/* Charts row — full width on all screen sizes */}
+              <div className="col-span-1 md:col-span-2 xl:col-span-4 grid grid-cols-1 md:grid-cols-2 xl:grid-cols-5 gap-6">
+                <div className="md:col-span-1 xl:col-span-3 bg-dashboard-bg-secondary border border-dashboard-border shadow-sm rounded-dashboard p-6 transition-all hover:shadow-md">
+                  <div className="flex items-center justify-between mb-6 md:mb-8">
                     <div>
-                      <h3 className="text-lg font-bold text-dashboard-text">Income vs Expenses</h3>
+                      <h3 className="text-base lg:text-lg font-bold text-dashboard-text">Income vs Expenses</h3>
                       <p className="text-xs text-dashboard-text-dim uppercase tracking-wider mt-1">6-month trend · {chartRange}</p>
                     </div>
                     <div className="hidden sm:flex items-center gap-4 text-xs uppercase font-bold tracking-widest text-dashboard-text-dim">
@@ -133,15 +136,15 @@ function App() {
                       <div className="flex items-center gap-2"><span className="w-2 h-2 rounded-full bg-dashboard-danger shadow-[0_0_8px_rgba(224,92,106,0.4)]" /> Expenses</div>
                     </div>
                   </div>
-                  <div className="h-[260px]">
+                  <div className="h-[240px] md:h-[260px]">
                     <TrendChart />
                   </div>
                 </div>
 
-                <div className="xl:col-span-2 bg-dashboard-bg-secondary border border-dashboard-border shadow-sm rounded-dashboard p-6 transition-all hover:shadow-md flex flex-col">
-                  <div className="flex justify-between items-start mb-8">
+                <div className="md:col-span-1 xl:col-span-2 bg-dashboard-bg-secondary border border-dashboard-border shadow-sm rounded-dashboard p-6 transition-all hover:shadow-md flex flex-col">
+                  <div className="flex justify-between items-start mb-6 md:mb-8">
                     <div>
-                      <h3 className="text-lg font-bold text-dashboard-text mb-1">Spending</h3>
+                      <h3 className="text-base lg:text-lg font-bold text-dashboard-text mb-1">Spending</h3>
                       <p className="text-xs text-dashboard-text-dim uppercase tracking-wider">By category</p>
                     </div>
                   </div>
@@ -151,10 +154,11 @@ function App() {
                 </div>
               </div>
 
-              <div className="xl:col-span-4 bg-dashboard-bg-secondary border border-dashboard-border shadow-sm rounded-dashboard p-6 transition-all hover:shadow-md">
+              {/* Activity manager — full width on all screen sizes */}
+              <div className="col-span-1 md:col-span-2 xl:col-span-4 bg-dashboard-bg-secondary border border-dashboard-border shadow-sm rounded-dashboard p-6 transition-all hover:shadow-md">
                 <div className="flex items-center justify-between mb-6">
                   <div>
-                    <h3 className="text-lg font-bold text-dashboard-text">Activity manager</h3>
+                    <h3 className="text-base lg:text-lg font-bold text-dashboard-text">Activity manager</h3>
                     <p className="text-xs text-dashboard-text-dim uppercase tracking-wider mt-1">
                       {transactions.length === 0 ? "No active records" : "Recent transactions"}
                     </p>
@@ -162,46 +166,47 @@ function App() {
                   {transactions.length > 0 && (
                     <button 
                       onClick={() => setView('transactions')}
-                      className="text-xs font-semibold text-dashboard-text hover:text-dashboard-accent transition-colors px-4 py-2 rounded-full border border-dashboard-border hover:bg-dashboard-bg-tertiary"
+                      className="text-xs font-semibold text-dashboard-text hover:text-dashboard-accent transition-colors px-3 py-1.5 md:px-4 md:py-2 rounded-full border border-dashboard-border hover:bg-dashboard-bg-tertiary whitespace-nowrap"
                     >
                       View all activities
                     </button>
                   )}
                 </div>
                 
-                <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 xl:grid-cols-5 gap-4">
+                {/* Activity cards grid: 2 cols on mobile/tablet, 3 on lg, 5 on xl */}
+                <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-4">
                   {transactions.length > 0 ? (
                     transactions.slice(0, 5).map((t, idx) => {
                       const Icon = CATEGORY_ICONS[t.category] || Utensils;
                       const bgGradient = PREM_GRADIENTS[idx % 5];
                       return (
-                        <div key={t.id} className={cn("relative flex flex-col p-5 rounded-[24px] overflow-hidden group transition-all duration-300 ease-out hover:shadow-[0_12px_40px_rgb(0,0,0,0.12)] hover:-translate-y-1 shadow-[0_8px_30px_rgb(0,0,0,0.06)] animate-in fade-in slide-in-from-bottom-4 fill-both text-white", bgGradient)} style={{ animationDelay: `${idx * 0.05}s` }}>
+                        <div key={t.id} className={cn("relative flex flex-col p-4 xl:p-5 rounded-[24px] overflow-hidden group transition-all duration-300 ease-out hover:shadow-[0_12px_40px_rgb(0,0,0,0.12)] hover:-translate-y-1 shadow-[0_8px_30px_rgb(0,0,0,0.06)] animate-in fade-in slide-in-from-bottom-4 fill-both text-white", bgGradient)} style={{ animationDelay: `${idx * 0.05}s` }}>
                           <div className="absolute inset-0 bg-white/5 opacity-0 group-hover:opacity-100 transition-opacity duration-300 pointer-events-none" />
                           <div className="relative z-10 flex flex-col h-full justify-between">
-                            <div className="flex items-center justify-between mb-5">
-                              <div className="w-[42px] h-[42px] rounded-[14px] flex items-center justify-center transition-transform duration-500 group-hover:scale-110 shadow-sm bg-white/20 backdrop-blur-sm">
-                                <Icon className="w-5 h-5 text-white opacity-90" strokeWidth={2.5} />
+                            <div className="flex items-center justify-between mb-4 xl:mb-5">
+                              <div className="w-[38px] h-[38px] xl:w-[42px] xl:h-[42px] rounded-[14px] flex items-center justify-center transition-transform duration-500 group-hover:scale-110 shadow-sm bg-white/20 backdrop-blur-sm">
+                                <Icon className="w-4 h-4 xl:w-5 xl:h-5 text-white opacity-90" strokeWidth={2.5} />
                               </div>
                               {isAdmin && (
                                 <div 
                                   onClick={() => { setSelectedTx(t); setModalType('edit'); }}
-                                  className="w-8 h-8 rounded-full hover:bg-white/20 flex items-center justify-center text-white/90 cursor-pointer transition-colors shadow-sm bg-white/10 backdrop-blur-sm"
+                                  className="w-7 h-7 xl:w-8 xl:h-8 rounded-full hover:bg-white/20 flex items-center justify-center text-white/90 cursor-pointer transition-colors shadow-sm bg-white/10 backdrop-blur-sm"
                                 >
-                                  <MoreHorizontal className="w-5 h-5" />
+                                  <MoreHorizontal className="w-4 h-4" />
                                 </div>
                               )}
                             </div>
                             <div>
-                              <div className="font-sora text-[22px] tracking-tight font-extrabold mb-1.5 text-white">
+                              <div className="font-sora text-[16px] md:text-[18px] xl:text-[20px] tracking-tight font-extrabold mb-1.5 text-white leading-tight">
                                 {t.type === 'income' ? '+' : '-'}₹{fmtAbs(t.amount).replace('₹', '')}
                               </div>
-                              <div className="text-[13px] font-bold text-white/90 tracking-wide truncate">{t.merchant}</div>
-                              <div className="flex items-center gap-1.5 mt-2">
-                                <div className="text-[9px] font-bold uppercase tracking-wider text-white/95 px-2 py-0.5 bg-white/25 rounded-md backdrop-blur-sm shadow-sm">
+                              <div className="text-[12px] xl:text-[13px] font-bold text-white/90 tracking-wide truncate">{t.merchant}</div>
+                              <div className="flex items-center gap-1 mt-2 flex-wrap">
+                                <div className="text-[8px] xl:text-[9px] font-bold uppercase tracking-wider text-white/95 px-1.5 py-0.5 bg-white/25 rounded-md backdrop-blur-sm shadow-sm truncate max-w-[80px]">
                                   {t.category}
                                 </div>
                                 <span className="text-white/60 text-[10px]">•</span>
-                                <div className="text-[9px] font-bold text-white/80 uppercase tracking-wider">
+                                <div className="text-[8px] xl:text-[9px] font-bold text-white/80 uppercase tracking-wider">
                                   {new Date(t.date).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })}
                                 </div>
                               </div>
