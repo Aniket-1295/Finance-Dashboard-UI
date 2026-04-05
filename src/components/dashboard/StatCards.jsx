@@ -84,8 +84,8 @@ export function SummaryGrid() {
       <StatCard 
         label="Total Balance" 
         value={fmtAbs(metrics.balance)} 
-        delta="22% than last month" 
-        up={true} 
+        delta={`${Math.abs(metrics.deltas.balance)}% than last month`} 
+        up={metrics.deltas.balance >= 0} 
         icon="briefcase" 
         bgGradient="bg-gradient-to-br from-[#45dfd7] to-[#2bd1d0]"
         delay="0s"
@@ -95,8 +95,8 @@ export function SummaryGrid() {
       <StatCard 
         label="Total Income" 
         value={fmtAbs(metrics.income)} 
-        delta="36% than last month" 
-        up={true} 
+        delta={`${Math.abs(metrics.deltas.income)}% than last month`} 
+        up={metrics.deltas.income >= 0} 
         icon="trending-up" 
         bgGradient="bg-gradient-to-br from-[#8db1fb] to-[#6c8cf4]"
         delay="0.1s"
@@ -106,8 +106,8 @@ export function SummaryGrid() {
       <StatCard 
         label="Total Expenses" 
         value={fmtAbs(metrics.expense)} 
-        delta="11% than last month" 
-        up={false} 
+        delta={`${Math.abs(metrics.deltas.expense)}% than last month`} 
+        up={metrics.deltas.expense >= 0} 
         icon="trending-down" 
         bgGradient="bg-gradient-to-br from-[#fca3bf] to-[#f66a98]"
         delay="0.2s"
@@ -117,8 +117,8 @@ export function SummaryGrid() {
       <StatCard 
         label="Total Savings" 
         value={metrics.savings + '%'} 
-        delta="15% than last month" 
-        up={true} 
+        delta={`${Math.abs(metrics.deltas.savings)}% than last month`} 
+        up={metrics.deltas.savings >= 0} 
         icon="piggy-bank" 
         bgGradient="bg-gradient-to-br from-[#d0a7fc] to-[#b385fb]"
         delay="0.3s"

@@ -40,6 +40,14 @@ export const SEED_TRANSACTIONS = [
   { id: 't26', date: '2024-06-03', merchant: 'Target', category: 'Shopping', type: 'expense', amount: -47.30 },
   { id: 't27', date: '2024-06-02', merchant: 'Pizza Night', category: 'Food & Dining', type: 'expense', amount: -34.00 },
   { id: 't28', date: '2024-06-01', merchant: 'Airbnb Commission', category: 'Investments', type: 'income', amount: 450.00 },
+  
+  // May 2024 Data for MoM Calculations
+  { id: 'm1', date: '2024-05-28', merchant: 'Salary Payment', category: 'Salary', type: 'income', amount: 4000.00 },
+  { id: 'm2', date: '2024-05-25', merchant: 'Monthly Rent', category: 'Housing', type: 'expense', amount: -1500.00 },
+  { id: 'm3', date: '2024-05-20', merchant: 'Supermarket', category: 'Food & Dining', type: 'expense', amount: -400.00 },
+  { id: 'm4', date: '2024-05-15', merchant: 'Freelance Work', category: 'Freelance', type: 'income', amount: 1000.00 },
+  { id: 'm5', date: '2024-05-10', merchant: 'Utility Bills', category: 'Utilities', type: 'expense', amount: -200.00 },
+  { id: 'm6', date: '2024-05-05', merchant: 'Amazon Shopping', category: 'Shopping', type: 'expense', amount: -300.00 },
 ];
 
 export const MONTHLY_DATA = {

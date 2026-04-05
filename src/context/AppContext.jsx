@@ -1,6 +1,7 @@
 import React, { createContext, useContext, useState, useMemo } from 'react';
 import { useLocalStorage } from '../hooks/useLocalStorage';
 import { SEED_TRANSACTIONS } from '../utils/constants';
+import { getLastNMonthsData } from '../utils/dataUtils';
 
 const AppContext = createContext();
 
@@ -29,6 +30,7 @@ export function AppProvider({ children }) {
 
   // Computed Metrics (Memoized for Performance)
   const metrics = useMemo(() => {
+    // Current Total Metrics
     const income = transactions
       .filter(t => t.type === 'income')
       .reduce((s, t) => s + t.amount, 0);
@@ -47,7 +49,26 @@ export function AppProvider({ children }) {
       });
     const spendByCategory = Object.entries(byCat).sort((a, b) => b[1] - a[1]);
 
-    return { balance, income, expense, savings, spendByCategory };
+    // MoM Calculation Logic
+    const last2Months = getLastNMonthsData(transactions, 2);
+    const deltas = { income: 0, expense: 0, balance: 0, savings: 0 };
+    
+    if (last2Months.length === 2) {
+      const prev = last2Months[0]; // May
+      const curr = last2Months[1]; // June
+      
+      const calcPct = (c, p) => p === 0 ? (c > 0 ? 100 : 0) : Math.round(((c - p) / Math.abs(p)) * 100);
+      
+      deltas.income = calcPct(curr.income, prev.income);
+      deltas.expense = calcPct(curr.expense, prev.expense);
+      deltas.balance = calcPct(curr.income - curr.expense, prev.income - prev.expense);
+      
+      const prevSav = prev.income > 0 ? Math.round(((prev.income - prev.expense) / prev.income) * 100) : 0;
+      const currSav = curr.income > 0 ? Math.round(((curr.income - curr.expense) / curr.income) * 100) : 0;
+      deltas.savings = currSav - prevSav; // Change in savings % point
+    }
+
+    return { balance, income, expense, savings, spendByCategory, deltas };
   }, [transactions]);
 
   // Derived Filtering & Pagination
