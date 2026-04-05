@@ -30,6 +30,7 @@ ChartJS.register(
 const PREM_PIE_COLORS = ['#f56795', '#45dfd7', '#ffb067', '#8db1fb', '#caa1f8', '#a1a1aa'];
 
 import { useAppContext } from '../../context/AppContext';
+import { cn } from '../../lib/utils';
 
 export function TrendChart() {
   const { theme, transactions } = useAppContext();
@@ -170,6 +171,7 @@ export function TrendChart() {
 export function SpendingDonut() {
   const { transactions, theme } = useAppContext();
   const isDark = theme === 'dark';
+  const [activeItem, setActiveItem] = React.useState(null);
   
   const processedData = React.useMemo(() => {
     const expenses = transactions.filter(t => t.type === 'expense');
@@ -209,17 +211,28 @@ export function SpendingDonut() {
     responsive: true,
     maintainAspectRatio: false,
     cutout: '80%',
+    onHover: (event, elements) => {
+      if (elements && elements.length > 0) {
+        setActiveItem(elements[0].index);
+      } else {
+        setActiveItem(null);
+      }
+    },
     plugins: {
       legend: { display: false },
       tooltip: {
-        backgroundColor: isDark ? '#2a2b40' : '#ffffff',
-        borderColor: isDark ? 'rgba(255, 255, 255, 0.05)' : 'rgba(0, 0, 0, 0.05)',
+        enabled: true,
+        backgroundColor: isDark ? 'rgba(17, 18, 31, 0.98)' : 'rgba(255, 255, 255, 0.98)',
+        borderColor: isDark ? 'rgba(255, 255, 255, 0.1)' : 'rgba(0, 0, 0, 0.1)',
         borderWidth: 1,
-        padding: 12,
-        cornerRadius: 12,
-        titleColor: isDark ? '#f0f0f5' : '#2a2b40',
-        bodyColor: isDark ? '#8186a1' : '#8186a1',
+        padding: 10,
+        cornerRadius: 10,
+        titleColor: isDark ? '#ffffff' : '#11121f',
+        bodyColor: isDark ? '#a1a1aa' : '#71717a',
+        titleFont: { size: 12, weight: 'bold' },
+        bodyFont: { size: 11 },
         displayColors: true,
+        boxPadding: 6,
       },
     },
   };
@@ -227,12 +240,17 @@ export function SpendingDonut() {
   return (
     <div className="flex items-center justify-between gap-3 h-[200px] w-full">
       <div className="h-[140px] w-[140px] shrink-0 relative flex items-center justify-center">
-        <Doughnut data={data} options={{...options, maintainAspectRatio: false}} />
-        <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none">
-           <div className="font-sora text-[17px] font-extrabold mt-0.5" style={{ color: isDark ? '#ffffff' : '#2a2b40' }}>
+        {/* Central text (Behind the canvas) */}
+        <div className="absolute inset-0 flex flex-col items-center justify-center pointer-events-none z-0">
+           <div className="font-sora text-[17px] font-extrabold mt-0.5 tracking-tight text-dashboard-text">
              ₹{totalAmount >= 1000 ? (totalAmount/1000).toFixed(1) + 'k' : totalAmount}
            </div>
            <div className="text-[9px] text-[#8186a1] font-semibold mt-1 uppercase tracking-wider">Spent</div>
+        </div>
+        
+        {/* Chart Canvas (On top of the text) */}
+        <div className="relative z-10 w-full h-full">
+          <Doughnut data={data} options={{...options, maintainAspectRatio: false}} />
         </div>
       </div>
       <div className="flex flex-col justify-center gap-y-3 flex-1 px-2">
