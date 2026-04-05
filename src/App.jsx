@@ -182,12 +182,14 @@ function App() {
                               <div className="w-[42px] h-[42px] rounded-[14px] flex items-center justify-center transition-transform duration-500 group-hover:scale-110 shadow-sm bg-white/20 backdrop-blur-sm">
                                 <Icon className="w-5 h-5 text-white opacity-90" strokeWidth={2.5} />
                               </div>
-                              <div 
-                                onClick={() => { setSelectedTx(t); setModalType('edit'); }}
-                                className="w-8 h-8 rounded-full hover:bg-white/20 flex items-center justify-center text-white/90 cursor-pointer transition-colors shadow-sm bg-white/10 backdrop-blur-sm"
-                              >
-                                <MoreHorizontal className="w-5 h-5" />
-                              </div>
+                              {isAdmin && (
+                                <div 
+                                  onClick={() => { setSelectedTx(t); setModalType('edit'); }}
+                                  className="w-8 h-8 rounded-full hover:bg-white/20 flex items-center justify-center text-white/90 cursor-pointer transition-colors shadow-sm bg-white/10 backdrop-blur-sm"
+                                >
+                                  <MoreHorizontal className="w-5 h-5" />
+                                </div>
+                              )}
                             </div>
                             <div>
                               <div className="font-sora text-[22px] tracking-tight font-extrabold mb-1.5 text-white">
