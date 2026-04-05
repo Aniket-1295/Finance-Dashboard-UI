@@ -1,19 +1,19 @@
 @import "tailwindcss";
 
 @theme {
-  --color-dashboard-bg: #000000;
-  --color-dashboard-island: #0a0a0a;
-  --color-dashboard-bg-secondary: #0d0d0d;
-  --color-dashboard-bg-tertiary: #161616;
-  --color-dashboard-border: rgba(255, 255, 255, 0.04);
-  --color-dashboard-border-strong: rgba(255, 255, 255, 0.08);
-  --color-dashboard-text: #fdfdfd;
-  --color-dashboard-text-muted: #a1a1a1;
-  --color-dashboard-text-dim: #666666;
-  --color-dashboard-accent: #e85d4e;
-  --color-dashboard-accent-muted: #d64d3e;
-  --color-dashboard-accent-soft: rgba(232, 93, 78, 0.15);
-  --color-dashboard-accent-glow: rgba(232, 93, 78, 0.25);
+  --color-dashboard-bg: #f8fafc;
+  --color-dashboard-island: #ffffff;
+  --color-dashboard-bg-secondary: #ffffff;
+  --color-dashboard-bg-tertiary: #f1f5f9;
+  --color-dashboard-border: rgba(0, 0, 0, 0.04);
+  --color-dashboard-border-strong: rgba(0, 0, 0, 0.08);
+  --color-dashboard-text: #2a2b40;
+  --color-dashboard-text-muted: #8186a1;
+  --color-dashboard-text-dim: #94a3b8;
+  --color-dashboard-accent: #6788f4;
+  --color-dashboard-accent-muted: #8db1fb;
+  --color-dashboard-accent-soft: rgba(103, 136, 244, 0.08);
+  --color-dashboard-accent-glow: rgba(103, 136, 244, 0.15);
   --color-dashboard-success: #4caf85;
   --color-dashboard-danger: #e05c6a;
   --color-dashboard-info: #5a9fd4;
@@ -27,25 +27,20 @@
 }
 
 @layer base {
-  :root {
-    --dashboard-bg: #000000;
-    --dashboard-text: #fdfdfd;
-  }
-  
-  [data-theme="light"] {
-    --color-dashboard-bg: #ffffff;
-    --color-dashboard-island: #f4f7fb;
-    --color-dashboard-bg-secondary: #ffffff;
-    --color-dashboard-bg-tertiary: #f8fafc;
-    --color-dashboard-border: rgba(0, 0, 0, 0.04);
-    --color-dashboard-border-strong: rgba(0, 0, 0, 0.08);
-    --color-dashboard-text: #2a2b40;
-    --color-dashboard-text-muted: #8186a1;
-    --color-dashboard-text-dim: #94a3b8;
-    --color-dashboard-accent: #6788f4;
-    --color-dashboard-accent-muted: #8db1fb;
-    --color-dashboard-accent-soft: rgba(103, 136, 244, 0.08);
-    --color-dashboard-accent-glow: rgba(103, 136, 244, 0.15);
+  [data-theme="dark"] {
+    --color-dashboard-bg: #0a0b14;
+    --color-dashboard-island: #11121e;
+    --color-dashboard-bg-secondary: #11121e;
+    --color-dashboard-bg-tertiary: #1a1b2e;
+    --color-dashboard-border: rgba(255, 255, 255, 0.04);
+    --color-dashboard-border-strong: rgba(255, 255, 255, 0.08);
+    --color-dashboard-text: #fdfdfd;
+    --color-dashboard-text-muted: #a1a1a1;
+    --color-dashboard-text-dim: #666666;
+    --color-dashboard-accent: #e85d4e;
+    --color-dashboard-accent-muted: #d64d3e;
+    --color-dashboard-accent-soft: rgba(232, 93, 78, 0.15);
+    --color-dashboard-accent-glow: rgba(232, 93, 78, 0.25);
   }
 
   body {

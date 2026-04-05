@@ -97,8 +97,8 @@ function App() {
 
   return (
     <div className={cn(
-      "min-h-screen font-inter transition-all duration-500 ease-in-out selection:bg-dashboard-accent/30 selection:text-dashboard-accent",
-      theme === 'dark' ? "dark bg-[#0a0b14]" : "bg-[#f8fafc]"
+      "min-h-screen font-inter transition-all duration-500 ease-in-out selection:bg-dashboard-accent/30 selection:text-dashboard-accent bg-dashboard-bg",
+      theme === 'dark' ? "dark" : ""
     )}>
       <Sidebar />
 
