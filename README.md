@@ -194,18 +194,39 @@ Structured using scalable Context API architecture:
 
 ---
 
+## 🧪 Automated Testing (Unit Tests)
+
+> [!IMPORTANT]
+> A comprehensive unit testing suite has been implemented using **Vitest** and **React Testing Library** to ensure the core dashboard functionality remains robust and bug-free.
+
+### Test Coverage Highlights:
+* **`App.test.jsx`**:
+    * **Visual Integrity**: Verifies that the "Financial Overview" primary heading and "Home > Overview" breadcrumbs render correctly.
+    * **Data Connectivity**: Ensures all four financial metric cards (Balance, Income, Expenses, Savings) are present and visible.
+    * **Component Rendering**: Validates that the **Activity Manager** and **Sidebar Navigation** components are successfully injected into the DOM.
+    * **Mocking Strategy**: Uses advanced Vitest mocking for complex Chart.js components to ensure fast, decoupled, and reliable test execution in a JSDOM environment.
+
+#### How to run tests:
+```bash
+npm test
+```
+
+---
+
 ## 📁 Project Structure (Simplified)
 
 ```
 src/
-│── components/
-│── assets/
-│── context/
-│── hooks/
-│── lib/
-│── utils/
-│── App.jsx
-│── main.jsx
+│── __tests__/       # Automated unit tests
+│── components/      # UI components
+│── assets/          # Static assets
+│── context/         # Application state (AppContext)
+│── hooks/           # Custom React hooks
+│── lib/             # Utility libraries (cn, etc.)
+│── utils/           # Data & formatting helpers
+│── setupTests.js    # Testing environment setup
+│── App.jsx          # Main App component
+│── main.jsx         # Entry point
 ```
 
 ---
@@ -281,10 +302,15 @@ http://localhost:5173
 
 * Clear README with setup, features, and approach explanation
 
-### 8. Attention to Detail
+### 8. Quality Assurance (Testing)
+
+* **Automated Unit Testing Environment**: Implemented **Vitest** + **React Testing Library** for the first time in the project to guarantee high delivery standards.
+
+### 9. Attention to Detail
 
 * Edge case handling
 * UI polish
+* Smooth transitions and interactions
 * Smooth transitions and interactions
 
 ---
