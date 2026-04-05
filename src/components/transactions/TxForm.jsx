@@ -44,7 +44,7 @@ export function TxForm({ tx, onSave, onClose }) {
       <div className="grid grid-cols-2 gap-4">
         <div>
           <label className="text-[11px] font-medium text-dashboard-text-dim uppercase tracking-wider mb-1.5 block">
-            Amount ($)
+            Amount (₹)
           </label>
           <input 
             className="w-full bg-dashboard-bg-tertiary border border-dashboard-border rounded-lg px-3 py-2.5 text-sm font-mono text-dashboard-text placeholder:text-dashboard-text-dim outline-none focus:border-dashboard-accent/40 transition-colors"

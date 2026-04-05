@@ -46,7 +46,7 @@ export function StatCard({ label, value, delta, up, color, icon, bgColor, delay 
         "font-mono text-2xl font-medium tracking-tighter mb-2",
         empty ? "text-dashboard-text-dim" : ""
       )} style={!empty ? { color } : {}}>
-        {empty ? "$0.00" : value}
+        {empty ? "₹0.00" : value}
       </div>
 
       {empty ? (

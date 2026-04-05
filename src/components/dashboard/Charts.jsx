@@ -107,7 +107,7 @@ export function TrendChart({ theme, transactions = [] }) {
         ticks: { 
           color: textColor, 
           font: { family: "'DM Mono', monospace", size: 10 },
-          callback: (v) => '$' + (v / 1000).toFixed(0) + 'k'
+          callback: (v) => '₹' + (v / 1000).toFixed(0) + 'k'
         },
       },
     },

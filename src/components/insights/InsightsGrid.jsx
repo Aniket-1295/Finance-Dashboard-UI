@@ -89,7 +89,7 @@ export function InsightsGrid({ transactions = [], spendByCategory = [], topCateg
         <InsightCard 
           icon={BarChart3}
           title="Avg. Transaction"
-          value={`$${avgTx}`}
+          value={`₹${avgTx}`}
           sub={`${transactions.length} total transactions`}
           delay="0.1s"
         />
@@ -172,14 +172,14 @@ export function InsightsGrid({ transactions = [], spendByCategory = [], topCateg
                   <div className="h-1.5 bg-dashboard-bg-tertiary rounded-full overflow-hidden">
                     <div className="h-full bg-dashboard-success rounded-full" style={{ width: `${(m.income/maxV*100).toFixed(1)}%` }} />
                   </div>
-                  <span className="text-[10px] text-dashboard-text-muted font-mono text-right">${(m.income/1000).toFixed(1)}k</span>
+                  <span className="text-[10px] text-dashboard-text-muted font-mono text-right">₹{(m.income/1000).toFixed(1)}k</span>
                 </div>
                 <div className="grid grid-cols-[60px_1fr_60px] gap-3 items-center">
                   <span className="text-[10px] text-dashboard-danger font-medium">Expense</span>
                   <div className="h-1.5 bg-dashboard-bg-tertiary rounded-full overflow-hidden">
                     <div className="h-full bg-dashboard-danger rounded-full" style={{ width: `${(m.expense/maxV*100).toFixed(1)}%` }} />
                   </div>
-                  <span className="text-[10px] text-dashboard-text-muted font-mono text-right">${(m.expense/1000).toFixed(1)}k</span>
+                  <span className="text-[10px] text-dashboard-text-muted font-mono text-right">₹{(m.expense/1000).toFixed(1)}k</span>
                 </div>
               </div>
             ))}
